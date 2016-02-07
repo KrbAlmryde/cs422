@@ -7,9 +7,11 @@ var canvas;
 // Shower Walls
 var Globals = {};
     Globals['waterTemp'] = 0,
-    Globals['hotWater'] = 10,
-    Globals['coldWater'] = 50,
-    Globals['showerSwitch'] = 0;
+    Globals['coldWater'] = 50, //10,
+    Globals['hotWater'] = 90, //50,
+    Globals['showerSwitch'] = 0,
+    Globals['ChildSafe'] = false,
+    Globals['Mode'] = 'Shower';
 
 
 
@@ -18,11 +20,13 @@ function init() {
        backgroundColor: "#5555F5" // background blue to help find it
     });
 
-    SetUpShower();
+    SetUpBasics();
+    SetUpPowerButton()
     SetUpTempControls();
-    SetUpShowerControls();
+    SetUpSprayControls();
     SetUpAnalogClock();
     SetUpBathControls();
+    SetUpChildSafe();
     // as a quick test I could have a 'button' that changes colour when I press it
 
     // zoomAll(canvas.height / localHeight);
@@ -30,7 +34,7 @@ function init() {
 
 
 function CheckLocalStorage() {
-    if (localStorage.hasOwnProperty('savedSetting')) {
+    if (localStorage.hasOwnProperty('testing')) {
         console.log('holyshit it persisted!');
         console.log(localStorage['savedSetting'])
     };

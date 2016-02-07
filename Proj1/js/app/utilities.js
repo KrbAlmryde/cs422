@@ -1,14 +1,131 @@
 // Utilities
 
+function ControlShowerSpray(counter) {
+    console.log("Shower!!", counter);
+    if (Globals['waterFlowing']) { // if water is flowing
+        Globals['sprayButton'].visible = true;  // show the control!
+        for (var i = 1; i < Globals['sprayButton']._objects.length; i++) {
+            Globals['sprayButton'].item(i).visible = counter === i; // cycle through the different spray types
+            Globals['showerHead'].item(i+1).visible = counter === i;// the same, but skip the empty shower head
+        };
+    } else { // if water is off
+        Globals['sprayButton'].visible = false;  // hide the button completely
+        for (var i = 1; i < Globals['sprayButton']._objects.length; i++) {
+            Globals['showerHead'].item(i).visible = false;
+        };
+        Globals['showerHead'].item(1).visible = true;
+        counter = 1;
+    };
+
+    canvas.renderAll();
+    canvas.deactivateAll(); // deselect everything
+
+}
+
+function ControlBathFlow() {
+    if ( Globals['waterFlowing'] ) { // We want to turn it off..
+        Globals['waterFlowing'] = false  // Indicate that no water is flowing
+
+        Globals['powerButton'].item(2).visible = false  // Hide the temperature gradient
+        Globals['showerHead'].item(1).visible = true; // show the no-spray icon
+
+        // Turn off all other spray icons
+        for (var i = 2; i < Globals['showerHead']._objects.length; i++) {
+            Globals['showerHead'].item(i).visible = false;
+        };
+
+        Globals['hotButton'].visible = false;
+        Globals['coldButton'].visible = false;
+
+        Globals['bathFaucet'].item(1).visible = false;
+
+    } else { // if water is not Flowing
+
+        Globals['waterFlowing'] = true;  // turn the water on!
+        Globals['powerButton'].item(2).visible = true  // Show the temperature gradient
+
+        // display the shower-spray button
+        Globals['hotButton'].visible = true;
+        Globals['coldButton'].visible = true;
+
+        Globals['bathFaucet'].item(1).visible = true;
+    };
+    canvas.renderAll();
+    canvas.deactivateAll(); // deselect everything
+
+}
+
+
+function ControlShowerFlow() {
+    console.log('waterFlowing', Globals['waterFlowing']);
+    // if water is Flowing
+    if ( Globals['waterFlowing'] ) { // We want to turn it off..
+        Globals['sprayButton'].visible = false;  // Hide the shower button completely
+        Globals['waterFlowing'] = false  // Indicate that no water is flowing
+
+        Globals['powerButton'].item(2).visible = false  // Hide the temperature gradient
+        Globals['showerHead'].item(1).visible = true; // show the no-spray icon
+
+        // Turn off all other spray icons
+        for (var i = 2; i < Globals['showerHead']._objects.length; i++) {
+            Globals['showerHead'].item(i).visible = false;
+        };
+
+        Globals['hotButton'].visible = false;
+        Globals['coldButton'].visible = false;
+
+        // Globals['bathFaucet'].item(1).visible = false;
+
+    } else { // if water is not Flowing
+
+        Globals['waterFlowing'] = true;  // turn the water on!
+        Globals['powerButton'].item(2).visible = true  // Show the temperature gradient
+
+        // display the shower-spray button
+        Globals['sprayButton'].visible = true;
+
+        Globals['sprayButton'].item(1).visible = true; //
+        Globals['sprayButton'].item(2).visible = false;
+
+
+        Globals['showerHead'].item(1).visible = false; // Hide the no-spray icon
+        Globals['showerHead'].item(2).visible = true; // show the default spray icon
+
+        Globals['hotButton'].visible = true;
+        Globals['coldButton'].visible = true;
+
+        // Globals['bathFaucet'].item(1).visible = true;
+    };
+    canvas.renderAll();
+    canvas.deactivateAll(); // deselect everything
+}
+
+
 function ControlWaterTemp(temp) {
+    // Apply temperature change
+    Globals['coldWater']+=temp;
+    Globals['hotWater']+=temp;
+
+    if ( Globals['ChildSafe'] )
+        if (Globals['hotWater'] > 100) {
+            Globals['hotWater'] = 100;
+            Globals['coldWater'] = 100-40;
+        };
+
+    if (Globals['hotWater'] > 140) {
+            Globals['hotWater'] = 140;
+            Globals['coldWater'] = 100;
+    }
+
     Globals['tempGradient'].setGradient('fill', {
-        x1: Globals['hotWater']+=temp,
-        x2: Globals['coldWater']+=temp,
+        x1: Globals['coldWater'],
+        x2: Globals['hotWater'],
         colorStops: {
             0: 'red',
             1: 'blue'
         }
     });
+    console.log( 'hot', Globals['hotWater'], 'cold', Globals['coldWater']);
     canvas.renderAll();
     canvas.deactivateAll(); // deselect everything
 
