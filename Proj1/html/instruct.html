@@ -1,0 +1,60 @@
+<h2>The Bad</h2>
+<p>
+    Perhaps the most obvious issue with the application is its total disregard for individuals suffering from color vision
+    deficiency, more colloquially known as Color Blindness. Arguably you can make some distinctions between the different
+    types based solely on color intensity and brightness, however this is inconsistent, especially considering the images
+    are slightly opaque causing some colors to darken as multiple data points overlap
+</p>
+<section>
+    <p>What individuals with typical color vsion would see</p>
+    <img src="./assets/badColor0.png" alt="Normal"/>
+
+    <p>The same page in as viewed by individuals who cannot see the color Green</p>
+    <img src="./assets/badColor1.png" alt="Deuteranomaly"/>
+
+
+    <div class="images">
+        <p>The same page in as viewed by individuals who cannot see the color Red </p>
+        <img src="./assets/badColor.png" alt="Protanopia"/>
+        <p>The same page in as viewed by individuals who cannot see the color Blue</p>
+        <img src="./assets/badColor2.png" alt="Tritanopia"/>
+    </div>
+</section>
+<section>
+    <p>
+        Though the application distinguishes the major categories
+        (<b class="falls">Falls</b> vs <b class="finds">Finds</b>) by color, Orange and yellow respectively, it does not
+        make the distinction between the different types of meteoroids. In this case, <strong>Stony</strong>,
+        <strong>Iron</strong>, and <strong>Combined-type</strong>. It is up to the user to specifically filter these
+        characteristics using the builtin filter option.
+    </p>
+</section>
+<section>
+    <p>
+        Interaction with the map must be done explicitly with the map directly. That is, the mouse must be hovering over
+        some part of the map itself, otherwise nothing can be interacted with. For example, if the user wishes to zoom
+        into a specific location, the mouse must be hovering over geographical landmass. If the mouse is hovering what
+        could be considered a body of water, interaction is restricted. The same is true when trying to drag the map to
+        reorient the view. Unless the user is dragging landmass, interaction is restricted.
+    </p>
+
+    <div class="images">
+        <video controls autoplay="true" loop="true">
+            <source src="./assets/badInteraction.mp4" type='video/mp4'/>
+        </video>
+    </div>
+
+</section>
+
+<div class="tldr">
+    <h4>TLDR</h4>
+    <ul>
+        <li>Does not accommodate color vision deficiency (re not Color Blindness Friendly)</li>
+        <li><img src="./assets/plusminus.png" alt="+/-" width="3%" /> icons do not function</li>
+        <li>Lack of visual distinction between Meteor type and source</li>
+        <li>Some interaction issues</li>
+        <li>Lacks quantitative analysis of data</li>
+        <li>No charts, graphs, or pie :( </li>
+    </ul>
+</div>
+<script>addBootstrap()</script>

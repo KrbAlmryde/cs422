@@ -1,0 +1,213 @@
+<!-- Questions
+===========
+
+* Think about how the user interacts with the shower / bath. What is the sequence of actions to take a comfortable shower? What is the sequence of actions to take a comfortable bath?
+
+* Think about the common things that you use a shower / bath for. What are the most common uses and other more rare uses. There is the obvious one of getting yourself clean, but maybe you also wash the dog there, or clean off plants.
+* How does the shower / bath help the user figure out how to work it
+* How does the system show the state of the system to the user
+* How easy is it for a guest to use this?
+
+* Discuss what is good and bad about the design, the mapping, the use of language or symbols, how accessible it is, etc.
+
+* Organize your discussion into sections
+
+* Think about some possible improvements, draw some sketches of your improved interface, and discuss those improvements
+
+
+
+===============================
+** This should be equivalent to at least four 8.5x11 typed pages of text with a 10 point font
+
+** Email the location of this webpage to the TA (syin8@uic.edu) before 9pm on 1/18
+
+** Bring a printout of your webpage (or a laptop or tablet where you can show your design to others - your phone is probably too sm all) to class on the 19th where we will have an in-class activity related to the homework
+-->
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>cs422 HW1</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container">
+
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <h1>HW1: Splish Splash </h1>
+                <p class="lead">Kyle Reese Almryde</p>
+
+                <h2><u>Overall Layout</u></h2>
+                The following series of images make up a personal spa/bath + shower setup I use in my apartment.
+                <br><b><em>Shower</em></b>
+                <img src="images/overall.jpg" class="img-responsive">
+                <b><em>Bathtub / Spa</em></b>
+                <img src="images/tub.jpg" class="img-responsive">
+                <hr></hr>
+                <div>
+                    <h3><u>Shower Head</u></h3>
+                    <!-- <img src="showerHead"> -->
+                        <p>
+                            An advanced shower head with unknown water saving properties. Has the following features:
+                            </p>
+                                <li>
+                                    <!-- <img src="SprayDial"> -->
+                                    Twisting dial-like control mechanism used to adjust the spray of water. There are <b>N</b> spray options:
+                                </li>
+                                <li>grooves along the side which make it easy to grip and turn</li>
+                                <li>a small lip is included which enables easier adjustments.</li>
+                                <li>
+                                    <!-- <img src="Rain_Spray"> -->
+                                    Rain setting consists of several nodes spraying long thin streams of water in an wide area. Good for covering the largest area with the highest volume of water. Pressure tends to be lower as there are many streams of water active.
+                                </li>
+                                <li>
+                                    <!-- <img src="Massage"> -->
+                                    Massage setting consists of relatively small set of nodes spraying water in controlled high pressure bursts, somewhat akin to a machine gun. Good for massaging sore muscles, pretending you have a machine gun, and removing dirt.
+                                </li>
+                                <li>Adjustable head which enables control over the direction of water flow</li>
+                            <p>
+
+                        </p>
+
+
+                </div>
+                <div>
+                    <b><u>Control Knob</u></b>
+                    <!-- <img src="Control knob"> -->
+                    <p>Controls for the volume and temperature of water
+                        <li>Activates water flow by <b>tilting</b> knob upward. Volume is controlled by tilting the head up or down</li>
+                        <li>Adjusts water for warm temperature by turning knob counter-clockwise, so that the arrow is pointing towards the red color band</li>
+                        <li>Adjusts water to be cooler by turning knob clockwise, pointing arrow towards the blue color band</li>
+                    </p>
+
+                </div>
+                <div>
+                    <b><u>Water Spout</u></b>
+                    <!-- <img src="Water Spout"> -->
+                    <p>
+                        Primary output source of water. Features a diverter rivet which controls the direction of the water. That is, whether the water goes to the primary output source (water spout) or the secondary output source (shower head)
+                        <li>Pull rivet up while water is actively flowing to divert the water to the shower head</li>
+                        <li>Push rivet down (default state) to divert water to the primary output spout</li>
+                    </p>
+                </div>
+                <div>
+                    <b><u>Bathtub plug</u></b>
+                    <!-- <img src="TubPlug"> -->
+                    <p>
+                        Controls the flow of water in and out of the bathtub. If the lever is lifted up, water will remain in the tub. If the lever is down, water will flow directly to
+                    </p>
+                </div>
+                <div>
+                    <b><u>Bathtub / Spa</u></b>
+                    <!-- <img src="Massage"> -->
+                    <p>As the above image shows, the bath consists of a large area suitable for holding a large volume of water</p>
+                    <p>shower head: which outputs water at high pressure, a control knob: which controls both the volume and temperature of the water flow</p>
+                    <p>a diverter: which is the primary output source of the water until the physical pin in pulled upwards at which time water is diverted away from the output spout.</p>
+
+                </div>
+                <!-- <img src="another image"> -->
+
+                <h3><u>Action Sequences</u></h3>
+                    <h4>Shower Sequences</h4>
+                    <li>Enter Bathtub/shower</li>
+                    <li>Turn control knob to initiate flow of water</li>
+                    <li>Adjust control knob to desired temperature</li>
+                    <li>Wait for water to reach desire temperature</li>
+                    <li>Test water to ensure desired temperature</li>
+                    <li>Re-test water to ensure desire temperature</li>
+                    <li><u>Activate</u> <em><b>diverter</b></em>  by pulling lever up</li>
+                    <li>Verify that water is being diverted to <em><b>secondary output component (shower head)</b></em></li>
+                    <li><em>Forget that pipes leading to shower head have not been flushed and suffer the brutal onslaught of frigid water</em></li>
+                    <h4>Bath Sequences</h4>
+                <h3>Use-Cases and Activities</h3>
+                    <h4>Shower Use-cases </h4>
+                        <li>
+                            <blockquote>Washing ones body</blockquote>
+                            <p>Obviously the most common use-case involved when using a device such as a shower is for the purposes of cleaning ones body. </p>
+                        </li>
+
+                        <li>
+                            <blockquote>Relaxation</blockquote>
+                            <p>At least for me, often times when Ive had a really stressful day, I will use the shower as a method of relaxation. The steam from the hot water has an almost cleansing effect, allowing me to take my mind off the stressful day. This is of course a terrible waste of water so I dont use this method often </p>
+                        </li>
+                        <li>
+                            <blockquote>Holistic care</blockquote>
+                            <p>Related to relaxation, often when I feel ill, such as when I have a headache, I use the shower as a means of holistic care. For reasons I dont fully understand, Ive found it can often relive (at least temporarily) my ailments</p>
+                        </li>
+
+                        <li>
+                            <blockquote>Giving the dog a bath</blockquote>
+                            <p>Contrary to the term above, when washing my dog, the bath is merely the receptacle in which to contain my dog. I use the shower to clean her. Living in an apartment and having no access to an outdoor hose, Ive found that this is an efficient method of maximizing the coverage of water-to-dog ratio when rinsing the soap and grim from her.</p>
+                        </li>
+                    <h4>Bath Use-cases </h4>
+                        <li>
+                            <blockquote>Relaxation</blockquote>
+                            <p>The primary use I have for taking a bath is for relaxation. There is nothing better after a particularly long day than a soak in the tub.</p>
+                        </li>
+                        <li>
+                            <blockquote>Brewing Beer</blockquote>
+                            <p>At least one occasion I may or may not have used the bathtub as a means of fermenting alcohol for the purposes of consumption</p>
+                        </li>
+                        <li>
+                            <blockquote>Entertainment</blockquote>
+                            <p>'Bath time' as a child was more like playtime than it was a period to clean ones body. Add the collection of action-figures and a mountain of bubbles, and you had yourself hours of fun! Mom and Dad were frequently annoyed by this.</p>
+                        </li>
+                        <li>
+                            <blockquote>Laundry</blockquote>
+                            <p>As a starving graduate student and a Chicago apartment dweller to boot, Ive found myself on more than one occasion lacking the available funds to wash my clothes in a traditional receptacle. When considering what a washing machine actually consists of: a vat of water, detergent, and a mechanism to aggitate the clothing in the water to perfuse the detergent into the clothes, you realize the bathtub makes a suitable replacement in a pinch. </p>
+                        </li>
+                        <li>
+                            <blockquote>Warmth</blockquote>
+                            <p>Early on in my tenure at Chicago, I found myself suffering from the bitterly cold winter. To combat this, I would fill the tub with warm water and soak up the warmth. This activity was also performed in conjunction with actually cleaning and/or relaxing, but it was just as important on its own as any of the other use cases.</p>
+                        </li>
+
+
+
+                <p>Users can select a district by double clicking on the district's name or colored circle below the name</p>
+                <!-- <img src="Images/distSelectedAfter.png" class="img-responsive"> -->
+
+
+                <h3>Viewing Data</h3>
+
+                <h4>Race, Gender, and Age</h4>
+
+                <p>By default, a bar graph consisting of the entire city demographics will be displayed. As Districts and communities are selected, charts will appear allowing the user to compare between city,district, and community level data.</p>
+                <p>Each chart consists of a grouping of the major racial demographics organized by age</p>
+                <p>Groups are labeled in the following manner:</p>
+                <ul><bl>NHW:</bl> Non Hispanic, White</ul>
+                <ul><bl>NHB:</bl> Non Hispanic, Black</ul>
+                <ul><bl>NHAM:</bl> Non Hispanic, Native Indian/Alakan</ul>
+                <ul><bl>NHAS:</bl> Non Hispanic, Asian</ul>
+                <ul><bl>HISP:</bl> Hispanic/Latino</ul>
+                <ul><bl>MULTI:</bl> Multiracial</ul>
+                <ul><bl>OTHER:</bl> Other</ul>
+
+                <h4>View by Gender</h4>
+
+                <p>The user may choose which gender to look at simply by clicking the "Change Gender" Button. By default, all charts start at the combined level data, switching to Men, and then Women respectively</p>
+
+                <!-- <img src="Images/Genders.png" class="img-responsive"> -->
+
+                <h3>Application Demo</h3>
+                <!-- <p>Watch a demo of it on <a href="http://youtu.be/jHwJC_3p044"> YouTube</a></p> -->
+                <p>Or here</p>
+                <!-- <iframe width="560" height="315" src="//www.youtube.com/embed/jHwJC_3p044" frameborder="0" allowfullscreen></iframe> -->
+                <h3>Trends</h3>
+                <p>The most obvious trends one can see are just how segregated the city of chicago is by race. The most obvious example of this would be South Side Chicago district vs Far North Side Chicago district, where the populations of White and African Americans clearly mirror each other. Further more, specific demographics tend to dominate certain communities over others. This can be seem in places like LakeView, which has a high concentration of young, mid 20s to early 30s, white residents. </p>
+                <h3>Data</h3>
+
+                <p>This project used race, gender, and age data from the 2010 US Census, as found <a href="http://robparal.blogspot.com/2012/05/hard-to-find-census-data-on-chicago.html">here</a>. In an effort to present it in a more concise manner, age groups were collapsed into ranges of 10 years</p>
+
+                <h3>Source</h3>
+
+                <p>The source code for this project can be found <a href="https://github.com/KrbAlmryde/KrbAlmryde.github.io/tree/master/SweetHomeChicago/">on GitHub</a></p>
+
+            </div>
+
+        </div>
+
+        </div>
+    </body>
+</html>
