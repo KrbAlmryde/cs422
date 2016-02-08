@@ -1,6 +1,14 @@
 // Utilities
 
 
+function UnitConversion() {
+    if (Globals['Units'] === 'F˚') {
+        return (Globals['hotWater']).toFixed(1) + " " + Globals['Units']
+    } else {
+        return ( (Globals['hotWater'] - 32) / 1.8 ).toFixed(1) + " " + Globals['Units']
+    };
+}
+
 function ControlShowerSpray(counter) {
     console.log("Shower!!", counter);
     if (Globals['waterFlowing']) { // if water is flowing
@@ -28,6 +36,7 @@ function ControlBathFlow() {
         Globals['waterFlowing'] = false  // Indicate that no water is flowing
 
         Globals['powerButton'].item(2).visible = false  // Hide the temperature gradient
+        Globals['powerButton'].item(3).visible = false  // Hide the temperature value
 
         Globals['hotButton'].visible = false;
         Globals['coldButton'].visible = false;
@@ -38,7 +47,7 @@ function ControlBathFlow() {
 
         Globals['waterFlowing'] = true;  // turn the water on!
         Globals['powerButton'].item(2).visible = true  // Show the temperature gradient
-
+        Globals['powerButton'].item(3).visible = Globals['Debug'] // If debug is true, show the temperature value
         // display the shower-spray button
         Globals['hotButton'].visible = true;
         Globals['coldButton'].visible = true;
@@ -58,8 +67,10 @@ function ControlShowerFlow() {
         Globals['sprayButton'].visible = false;  // Hide the shower button completely
         Globals['waterFlowing'] = false  // Indicate that no water is flowing
 
-        Globals['powerButton'].item(2).visible = false  // Hide the temperature gradient
         Globals['showerHead'].item(1).visible = true; // show the no-spray icon
+
+        Globals['powerButton'].item(2).visible = false  // Hide the temperature gradient
+        Globals['powerButton'].item(3).visible = false  // Hide the temperature value
 
         // Turn off all other spray icons
         for (var i = 2; i < Globals['showerHead']._objects.length; i++) {
@@ -75,16 +86,23 @@ function ControlShowerFlow() {
 
         Globals['waterFlowing'] = true;  // turn the water on!
         Globals['powerButton'].item(2).visible = true  // Show the temperature gradient
+        Globals['powerButton'].item(3).visible = Globals['Debug'] // If debug is true, show the temperature value
 
         // display the shower-spray button
         Globals['sprayButton'].visible = true;
 
-        Globals['sprayButton'].item(1).visible = true; //
-        Globals['sprayButton'].item(2).visible = false;
+
+        for (var i = 1; i < Globals['sprayButton']._objects.length; i++) {
+            Globals['sprayButton'].item(i).visible = Globals['Spray'] === i; // cycle through the different spray types
+            Globals['showerHead'].item(i+1).visible = Globals['Spray'] === i;// the same, but skip the empty shower head
+        };
+
+        // Globals['sprayButton'].item(1).visible = true; //
+        // Globals['sprayButton'].item(2).visible = false;
 
 
-        Globals['showerHead'].item(1).visible = false; // Hide the no-spray icon
-        Globals['showerHead'].item(2).visible = true; // show the default spray icon
+        // Globals['showerHead'].item(1).visible = false; // Hide the no-spray icon
+        // Globals['showerHead'].item(2).visible = true; // show the default spray icon
 
         Globals['hotButton'].visible = true;
         Globals['coldButton'].visible = true;
@@ -111,6 +129,7 @@ function ControlWaterTemp(temp) {
             Globals['hotWater'] = 140;
             Globals['coldWater'] = 100;
     }
+    Globals['temperature'].text = UnitConversion();
 
     Globals['tempGradient'].setGradient('fill', {
         x1: Globals['coldWater'],

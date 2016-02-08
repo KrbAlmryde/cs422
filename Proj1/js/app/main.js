@@ -9,18 +9,25 @@ var Globals = {};
     Globals['waterTemp'] = 0,
     Globals['coldWater'] = 50, //10,
     Globals['hotWater'] = 90, //50,
-    Globals['showerSwitch'] = 0,
-    Globals['ChildSafe'] = false,
+    Globals['ChildSafe'] = true,
     Globals['Mode'] = 'Shower';
+    Globals['User'] = null,  // This could 'me' or new
+    Globals['Language'] = 'English',
+    Globals['Units'] = 'F˚', // C˚
+    Globals['Debug'] = true,
+    Globals['Spray'] = 1 // 2, 3
+
+
 
 
 function init() {
     canvas = new fabric.Canvas('c', {
        backgroundColor: "#5555F5" // background blue to help find it
     });
-
+    CheckLocalStorage();
     SetUpBasics();
     SetUpModes();
+    SetUpSettings({});
 
     // SetUpChildSafe();  // give it an object containing position information
     // SetUpPowerButton();  // give it an object containing position information
@@ -33,9 +40,13 @@ function init() {
 
 
 function CheckLocalStorage() {
-    if (localStorage.hasOwnProperty('testing')) {
-        console.log('holyshit it persisted!');
-        console.log(localStorage['savedSetting'])
+    if (Lockr.get('krba') === undefined) {  // This browser doesnt know us
+        Lockr.set('krba',
+                {
+                    'Bath': {'me': {'Language': 'English', 'Units': 'F˚', 'Spray': 2, 'ChildSafe': false } },
+                    'Shower': {'me':{}}
+                }
+            )
     };
 }
 
