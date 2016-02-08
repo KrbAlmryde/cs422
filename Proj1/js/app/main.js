@@ -13,7 +13,6 @@ var Globals = {};
     Globals['ChildSafe'] = false,
     Globals['Mode'] = 'Shower';
 
-google.load("language", "1");
 
 function init() {
     canvas = new fabric.Canvas('c', {
@@ -21,13 +20,13 @@ function init() {
     });
 
     SetUpBasics();
-    SetUpPowerButton()
-    SetUpTempControls();
-    SetUpSprayControls();
-    SetUpAnalogClock();
-    SetUpBathControls();
-    SetUpChildSafe();
-    // as a quick test I could have a 'button' that changes colour when I press it
+    SetUpModes();
+
+    // SetUpChildSafe();  // give it an object containing position information
+    // SetUpPowerButton();  // give it an object containing position information
+    // SetUpTempControls();  // give it an object containing position information
+
+    // Should be called by the Modes' callback
 
     // zoomAll(canvas.height / localHeight);
 }

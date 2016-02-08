@@ -1,8 +1,95 @@
 // Setup Functions
 
-
 function SetUpKeyboard() {}
 
+function SetUpUserModel() {}
+
+function SetUpModes() {
+
+    var bath = new fabric.Circle({
+        radius: 100,
+        fill: 'grey',
+        left: 701,
+        top: 500,
+        originX: 'center',
+        originY: 'center',
+        hasControls: false,
+        hasBorders: true,
+        lockMovementX: true,
+        lockMovementY: true
+
+    })
+
+    fabric.loadSVGFromURL('js/assets/bathing/bathtub.svg', function(obj, opt){
+        var img = fabric.util.groupSVGElements(obj, opt);
+            img.set( { left: 701, top: 500,
+                        originX: 'center',
+                        originY:'center',
+                        scaleX: 3.0,
+                        scaleY: 3.0,
+                        visible: true
+                    } )
+
+        Globals['BathMode'] = new fabric.Group([ bath, img])
+            .on('selected', function() {
+                Globals['Mode'] = 'Bath'
+                SetUpAnalogClock(); // This can stay where it is
+                SetUpBathControls();
+                SetUpChildSafe( {left: 468, top: 834} );  // give it an object containing position information
+                SetUpPowerButton( {left: 534, top: 880} );  // give it an object containing position information
+                SetUpAnalogClock(); // This can stay where it is
+                SetUpTempControls( {hotL: 516, hotT: 960, coldL: 701, coldT: 960} );  // give it an object containing position information
+
+
+                canvas.renderAll();
+                canvas.deactivateAll(); // deselect everything
+
+            })
+        canvas.add(Globals['BathMode']);
+    })
+
+
+    var shower = new fabric.Circle({
+        radius: 100,
+        fill: 'grey',
+        left: 1017,
+        top: 500,
+        originX: 'center',
+        originY: 'center',
+        hasControls: false,
+        hasBorders: true,
+        lockMovementX: true,
+        lockMovementY: true
+    })
+
+    fabric.loadSVGFromURL('js/assets/bathing/shower.svg', function(obj, opt){
+        var img = fabric.util.groupSVGElements(obj, opt);
+            img.set( { left: 1017, top: 500,
+                        originX: 'center',
+                        originY:'center',
+                        scaleX: 0.35,
+                        scaleY: 0.35,
+                        visible: true
+                    } )
+
+        Globals['ShowerMode'] = new fabric.Group([ shower, img])
+            .on('selected', function() {
+                Globals['Mode'] = 'Shower';
+
+                SetUpAnalogClock(); // This can stay where it is
+                SetUpChildSafe( {top: 404, left: 1525} );  // give it an object containing position information
+                SetUpPowerButton( {left: 1583, top: 452} );  // give it an object containing position information
+                SetUpTempControls( {hotL: 1580, hotT: 525, coldL: 1740, coldT: 525} );  // give it an object containing position information
+                SetUpSprayControls();
+                // SetUpBathControls()
+
+                canvas.renderAll();
+                canvas.deactivateAll(); // deselect everything
+
+            })
+        canvas.add(Globals['ShowerMode']);
+    })
+}
 
 
 /**
@@ -13,7 +100,7 @@ function SetUpKeyboard() {}
  *  baby, in the case where child safety is active, and a sad faced baby, when
  *  it is inactive.
  */
-function SetUpChildSafe() {
+function SetUpChildSafe(pos) {
 
     var button = new fabric.Circle({
         radius: 200,
@@ -29,7 +116,6 @@ function SetUpChildSafe() {
             img.set( { left: 500, top: 500,
                         originX: 'center',
                         originY:'center',
-                        // fill: "#ffffff",
                         visible: true
                     } )
 
@@ -38,11 +124,10 @@ function SetUpChildSafe() {
                 img1.set( { left: 500, top: 500,
                             originX: 'center',
                             originY:'center',
-                            // fill: "#ffffff",
                             visible: false
                         } )
 
-            Globals['ChildSafeButton'] = new fabric.Group([button, img, img1], {top: 390, left: 1613})
+            Globals['ChildSafeButton'] = new fabric.Group([button, img, img1], {top: pos.top, left: pos.left})
             Globals['ChildSafeButton']
                 .scale(0.12)
                 .on('selected', function() {
@@ -80,7 +165,12 @@ function SetUpAnalogClock() {
         left: 500,
         top: 500,
         originX: 'center',
-        originY: 'center'
+        originY: 'center',
+        hasControls: false,
+        hasBorders: true,
+        lockMovementX: true,
+        lockMovementY: true
+
     })
 
     var analogClock = [ face ];
@@ -112,8 +202,8 @@ function SetUpSprayControls() {
     canvas.remove(Globals['showerHead']);
 
     var button = new fabric.Circle({
-      left: 1580,
-      top: 425,
+      left: 1660, //1580,
+      top: 425, //425,
       originX: 'center',
       originY: 'center',
       fill: 'grey',
@@ -125,7 +215,7 @@ function SetUpSprayControls() {
 
     var counter = 1;
 
-    var options = { left: 1580, top: 425, originX: 'center', originY: 'center',
+    var options = { left: 1660, top: 425, originX: 'center', originY: 'center',
                     scaleX: 1.0, scaleY: 1.0, visible: false }
 
     var showerOptions = { left: 1635, top: 100,  originX: 'center', originY: 'center',
@@ -177,7 +267,7 @@ function SetUpSprayControls() {
 /**
  *
  */
-function SetUpPowerButton() {
+function SetUpPowerButton(pos) {
 
     fabric.loadSVGFromURL('js/assets/icons/power107.svg', function(obj, opt) {
         var img = fabric.util.groupSVGElements(obj, opt);
@@ -227,7 +317,7 @@ function SetUpPowerButton() {
             }
         });
 
-        Globals['powerButton'] = new fabric.Group([ power, img, Globals['tempGradient'] ], {left: 1583, top: 452})
+        Globals['powerButton'] = new fabric.Group([ power, img, Globals['tempGradient'] ], {left: pos.left, top: pos.top})
             .on('selected', function() {
                 if ( Globals['Mode'] === 'Shower' )
                     ControlShowerFlow();
@@ -252,13 +342,13 @@ function SetUpPowerButton() {
  *
  * Finally, should 'ChildSafe Mode' be active, the temperature will stop at 100
  */
-function SetUpTempControls() {
+function SetUpTempControls(pos) {
 
     fabric.loadSVGFromURL('js/assets/icons/flame.svg', function(obj, opt) {
         var img = fabric.util.groupSVGElements(obj, opt);
         img.set({
-            left: 1580,
-            top: 525,
+            left: pos.hotL, // 1580,
+            top: pos.hotT, // 525,
             originX: 'center',
             originY: 'center',
             scaleX: 0.1,
@@ -267,14 +357,14 @@ function SetUpTempControls() {
         .setFill('#ff0000');
 
         var button1 = new fabric.Circle({
-          left: 1580,
-          top: 525,
-          originX: 'center',
-          originY: 'center',
-          fill: 'grey',
-          radius: 50,
-          lockMovementX: true,
-          lockMovementY: true
+            left: pos.hotL, // 1580,
+            top: pos.hotR, // 525,
+            originX: 'center',
+            originY: 'center',
+            fill: 'grey',
+            radius: 50,
+            // lockMovementX: true,
+            // lockMovementY: true
         })
 
         Globals['hotButton'] = new fabric.Group([button1, img ], { visible: false })
@@ -290,8 +380,8 @@ function SetUpTempControls() {
     fabric.loadSVGFromURL('js/assets/icons/snowflake.svg', function(obj, opt) {
         var img = fabric.util.groupSVGElements(obj, opt);
         img.set({
-            left: 1740,
-            top: 525,
+            left: pos.coldL, // 1740,
+            top: pos.coldT, //525,
             originX: 'center',
             originY: 'center',
             scaleX: 0.1,
@@ -300,14 +390,14 @@ function SetUpTempControls() {
         .setFill('#0000ff');
 
         var button2 = new fabric.Circle({
-          left: 1740,
-          top: 525,
-          originX: 'center',
-          originY: 'center',
-          fill: 'grey',
-          radius: 50,
-          lockMovementX: true,
-          lockMovementY: true
+            left: pos.coldL, // 1740,
+            top: pos.coldT, //525,
+            originX: 'center',
+            originY: 'center',
+            fill: 'grey',
+            radius: 50,
+            // lockMovementX: true,
+            // lockMovementY: true
         })
 
         Globals['coldButton'] = new fabric.Group([button2, img ], { visible: false })
@@ -336,6 +426,7 @@ function SetUpBathControls() {
         canvas.add(Globals['bathFaucet']);
     })
 }
+
 
 function SetUpBasics() {
     Globals['waterFlowing'] = false;

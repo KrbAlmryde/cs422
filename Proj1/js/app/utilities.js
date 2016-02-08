@@ -1,5 +1,6 @@
 // Utilities
 
+
 function ControlShowerSpray(counter) {
     console.log("Shower!!", counter);
     if (Globals['waterFlowing']) { // if water is flowing
@@ -27,12 +28,6 @@ function ControlBathFlow() {
         Globals['waterFlowing'] = false  // Indicate that no water is flowing
 
         Globals['powerButton'].item(2).visible = false  // Hide the temperature gradient
-        Globals['showerHead'].item(1).visible = true; // show the no-spray icon
-
-        // Turn off all other spray icons
-        for (var i = 2; i < Globals['showerHead']._objects.length; i++) {
-            Globals['showerHead'].item(i).visible = false;
-        };
 
         Globals['hotButton'].visible = false;
         Globals['coldButton'].visible = false;
