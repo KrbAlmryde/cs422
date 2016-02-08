@@ -42,7 +42,7 @@ function SetUpChildSafe() {
                             visible: false
                         } )
 
-            Globals['ChildSafeButton'] = new fabric.Group([button, img, img1])
+            Globals['ChildSafeButton'] = new fabric.Group([button, img, img1], {top: 390, left: 1613})
             Globals['ChildSafeButton']
                 .scale(0.12)
                 .on('selected', function() {
@@ -173,6 +173,10 @@ function SetUpSprayControls() {
 
 
 
+
+/**
+ *
+ */
 function SetUpPowerButton() {
 
     fabric.loadSVGFromURL('js/assets/icons/power107.svg', function(obj, opt) {

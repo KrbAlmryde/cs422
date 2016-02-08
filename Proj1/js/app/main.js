@@ -13,7 +13,7 @@ var Globals = {};
     Globals['ChildSafe'] = false,
     Globals['Mode'] = 'Shower';
 
-
+google.load("language", "1");
 
 function init() {
     canvas = new fabric.Canvas('c', {
