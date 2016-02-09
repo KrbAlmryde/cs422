@@ -11,11 +11,12 @@ var Globals = {};
     Globals['hotWater'] = 90, //50,
     Globals['ChildSafe'] = true,
     Globals['Mode'] = 'Shower';
-    Globals['User'] = null,  // This could 'me' or new
+    Globals['User'] = 'me',  // This could 'me' or new
     Globals['Language'] = 'English',
-    Globals['Units'] = 'F˚', // C˚
-    Globals['Debug'] = true,
-    Globals['Spray'] = 1 // 2, 3
+    Globals['Units'] = 'F', // C
+    Globals['Debug'] = false,
+    Globals['Spray'] = 1, // 2, 3
+    Globals['curSpray'] = 1 // 2, 3
 
 
 
@@ -27,7 +28,6 @@ function init() {
     CheckLocalStorage();
     SetUpBasics();
     SetUpModes();
-    SetUpSettings({});
 
     // SetUpChildSafe();  // give it an object containing position information
     // SetUpPowerButton();  // give it an object containing position information
@@ -43,7 +43,7 @@ function CheckLocalStorage() {
     if (Lockr.get('krba') === undefined) {  // This browser doesnt know us
         Lockr.set('krba',
                 {
-                    'Bath': {'me': {'Language': 'English', 'Units': 'F˚', 'Spray': 2, 'ChildSafe': false } },
+                    'Bath': {'me': {'Language': 'English', 'Units': 'F', 'Spray': 2, 'ChildSafe': false } },
                     'Shower': {'me':{}}
                 }
             )

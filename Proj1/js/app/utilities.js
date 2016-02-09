@@ -1,8 +1,76 @@
 // Utilities
 
 
+function LoadSession() {
+    var KRBA = Lockr.get('krba');
+    var MODE = KRBA[ Globals['Mode'] ];
+
+    if ( MODE.hasOwnProperty(Globals['User']) ) {
+        var USER = MODE[Globals['User']]
+        Globals['Language'] = USER[ 'Language']
+        Globals['Units'] = USER[ 'Units' ]
+        Globals['Spray'] = USER[ 'Spray']
+        Globals['ChildSafe'] = USER[ 'ChildSafe' ]
+        Globals['hotWater'] = USER[ 'Hot' ]
+        Globals['coldWater'] = USER[ 'Cold' ]
+        Globals['Debug'] = USER[ 'Debug' ]
+    };
+
+    if (Globals['Mode'] === 'Bath') {
+
+        SetUpSettings({left: 460, top: 708})
+        SetUpAnalogClock(); // This can stay where it is
+        SetUpBathControls();
+        SetUpChildSafe( {left: 468, top: 834} );  // give it an object containing position information
+        SetUpPowerButton( {left: 534, top: 880} );  // give it an object containing position information
+        SetUpAnalogClock(); // This can stay where it is
+        SetUpTempControls( {hotL: 516, hotT: 960, coldL: 701, coldT: 960} );  // give it an object containing position information
+
+    } else {
+        SetUpSettings({left: 10, top: 126})
+        SetUpAnalogClock(); // This can stay where it is
+        SetUpChildSafe( {top: 404, left: 1525} );  // give it an object containing position information
+        SetUpPowerButton( {left: 1583, top: 452} );  // give it an object containing position information
+        SetUpTempControls( {hotL: 1580, hotT: 525, coldL: 1740, coldT: 525} );  // give it an object containing position information
+        SetUpSprayControls();
+
+    }
+    canvas.renderAll();
+    canvas.deactivateAll(); // deselect everything
+
+
+}
+
+function SaveSession() {
+    Globals['Spray'] = Globals['curSpray'];
+
+    Globals['saveButton'].item(1).set('fill', '#ffffff')
+    var KRBA = Lockr.get('krba');
+    var MODE = KRBA[ Globals['Mode'] ];
+    var USER = MODE[ Globals['User'] ];
+
+    if (USER === undefined)
+        USER = {};
+    USER[ 'Language'] = Globals['Language']
+    USER[ 'Units' ] = Globals['Units']
+    USER[ 'Spray'] = Globals['Spray']
+    USER[ 'ChildSafe' ] = Globals['ChildSafe']
+    USER[ 'Hot' ] = Globals['hotWater']
+    USER[ 'Cold' ] = Globals['coldWater']
+    USER[ 'Debug' ] = Globals['Debug']
+
+    MODE[ Globals['User'] ] = USER;
+    KRBA[ Globals['Mode'] ] = MODE;
+
+    Lockr.set('krba', KRBA);
+    console.log(localStorage);
+
+    canvas.renderAll();
+    canvas.deactivateAll(); // deselect everything
+}
+
 function UnitConversion() {
-    if (Globals['Units'] === 'F˚') {
+    if (Globals['Units'] === 'F') {
         return (Globals['hotWater']).toFixed(1) + " " + Globals['Units']
     } else {
         return ( (Globals['hotWater'] - 32) / 1.8 ).toFixed(1) + " " + Globals['Units']
@@ -11,6 +79,8 @@ function UnitConversion() {
 
 function ControlShowerSpray(counter) {
     console.log("Shower!!", counter);
+    Globals['curSpray'] = counter; // to keep track of it
+
     if (Globals['waterFlowing']) { // if water is flowing
         Globals['sprayButton'].visible = true;  // show the control!
         for (var i = 1; i < Globals['sprayButton']._objects.length; i++) {

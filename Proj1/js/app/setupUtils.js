@@ -2,17 +2,150 @@
 
 function SetUpKeyboard() {}
 
-function SetUpUserModel() {}
+function SetUpUserModel() {
+    var KRBA = Lockr.get('krba');
+    var MODE = KRBA[ Globals['Mode'] ];
+
+    var count = 0;
+    Globals['Users'] = [];
+
+    for (usr in MODE) {
+
+        var button = new fabric.Circle({
+            radius: 50,
+            fill: 'grey',
+            left: 701 + (120 * count),
+            top: 500,
+            originX: 'center',
+            originY: 'center',
+            hasControls: false,
+            hasBorders: true,
+            lockMovementX: true,
+            lockMovementY: true
+        })
+
+
+        var textParams = {
+             top: 500,
+             left: 701 + (120 * count),
+             fontSize: 30,
+             fontFamily: 'Helvetica',
+             originX: 'center',
+             originY: 'center',
+             visible: true,
+             fill: '#ffffff',
+             text: usr.toString()
+        }
+
+        var userText = new fabric.Text('default', textParams )
+        var userGroup = new fabric.Group( [ button, userText ])
+            .on('selected', function() {
+                Globals['User'] = usr;
+                console.log('Fuck you! usergroup', Globals['User']);
+                LoadSession()
+            })
+        Globals['Users'].push(userGroup);
+        canvas.add(userGroup);
+        count++
+    }
+
+
+    fabric.loadSVGFromURL('js/assets/icons/plussign1.svg', function(obj, opt){
+      var button = new fabric.Circle({
+            radius: 50,
+            fill: 'grey',
+            left: 701,
+            top: 630,
+            originX: 'center',
+            originY: 'center',
+            hasControls: false,
+            hasBorders: true,
+            lockMovementX: true,
+            lockMovementY: true
+        })
+        var img = fabric.util.groupSVGElements(obj, opt);
+            img.set( { left: 701, top: 630,
+                        originX: 'center',
+                        originY:'center',
+                        scaleX: 0.1,
+                        scaleY: 0.1,
+                        visible: true
+                    } )
+        Globals['newUser'] = new fabric.Group([button, img])
+            .on('selected', function() {
+                console.log('Fuck you! newUser');
+                var phrase = ""
+                switch(Globals['Language']) {
+                    case 'Italiano':
+                        phrase = "Inserire fino a quattro lettere per il nome qui";
+                        break;
+                    case 'French':
+                        phrase = "Entrez jusqu'à quatre lettres pour le nom ici";
+                        break;
+                    case 'Basque':
+                        phrase = "Idatzi gehienez lau letrak name for hemen";
+                        break;
+                    case 'Afrikaans':
+                        phrase = "Jy kan slegs vier letters vir naam hier";
+                        break;
+                    case 'English':
+                    default:
+                        phrase = 'Enter up to four letters for name here'
+                        break;
+                }
+                var itext = new fabric.IText(phrase, {
+                                 top: 500,
+                                 left: 701,
+                                 fontSize: 30,
+                                 fontFamily: 'Helvetica',
+                                 originX: 'center',
+                                 originY: 'center',
+                                 visible: true,
+                                 fill: '#000000'
+                            })
+                for (var i = 0; i < Globals['Users'].length; i++) {
+                    Globals['Users'][i].visible = false;
+                    canvas.remove(Globals['Users'][i]);
+                    // Globals['Users'].pop()
+                };
+
+                canvas.add(itext).setActiveObject(itext);
+                itext.enterEditing();
+
+                setTimeout(function(){
+                    if(itext.text === '' || itext.text.length > 4)
+                        Globals['User'] = 'you!';
+                    else
+                        Globals['User'] = itext.text;
+                    console.log(Globals['User'], itext.text);
+                    canvas.remove(itext);
+                    canvas.remove(Globals['newUser'])
+                    LoadSession();
+                }, 8000)
+            })
+        canvas.add(Globals['newUser'])
+    })
+
+}
 
 
 function SetUpSettings(pos) {
+    for (var i = 0; i < Globals['Users'].length; i++) {
+        Globals['Users'][i].visible = false;
+        canvas.remove(Globals['Users'][i]);
+    };
+    // canvas.remove(Globals['Users'].pop());
+    console.log("SetUpSettings", Globals['Users']);
+    canvas.remove(Globals['newUser']);
+
 
     var on = false;
+    var saved = false;
 
     var parameters = { radius: 30, fill: 'grey', left: 500, top: 500,
                        originX: 'center', originY: 'center'  }
 
-    // Generating the F˚/C˚ options
+    // Generating the F/C options
     var textParams = {
                  left: 500, top: 505, fontFamily: 'Helvetica', fontSize: 40,
                  originX: 'center', originY: 'center', text: Globals['Units']
@@ -20,14 +153,14 @@ function SetUpSettings(pos) {
 
     var button = new fabric.Circle( parameters )
     var imgText = new fabric.Text('default', textParams )
-    Globals['unitsButton'] = new fabric.Group([button, imgText])
+    Globals['unitsButton'] = new fabric.Group([button, imgText], {visible: false, left: pos.left+80*3, top: pos.top })
         .on('selected', function(){
             var text = Globals['unitsButton'].item(1).text;
             console.log(text);
-            if ( text === 'F˚' )
-                text = 'C˚'
+            if ( text === 'F' )
+                text = 'C'
             else
-                text = 'F˚'
+                text = 'F'
             Globals['Units'] = Globals['unitsButton'].item(1).text = text;
             Globals['temperature'].text = UnitConversion();
             canvas.renderAll();
@@ -45,12 +178,21 @@ function SetUpSettings(pos) {
             })
 
         var button = new fabric.Circle( parameters )
-        Globals['saveButton'] = new fabric.Group( [button, imgFloppy] )
-            .on('selected', function(){
-                canvas.renderAll();
-                canvas.deactivateAll(); // deselect everything
+        Globals['saveButton'] = new fabric.Group( [button, imgFloppy] , {visible: false, left: pos.left+80*4, top: pos.top })
+            .on(
+                {
+                    "mousedown": function(){
+                        SaveSession();
+                    },
 
-            })
+                    "mouseup": function(){
+                        Globals['saveButton'].item(1).set('fill', '#000000')
+                        canvas.renderAll();
+                        canvas.deactivateAll(); // deselect everything
+
+                    }
+                })
+
 
         fabric.loadSVGFromURL('js/assets/icons/information15.svg', function(obj, opt) {
             var imgInfo = fabric.util.groupSVGElements(obj, opt)  // Gear
@@ -62,7 +204,7 @@ function SetUpSettings(pos) {
                     visible: true
                 })
             var button = new fabric.Circle( parameters )
-            Globals['infoButton'] = new fabric.Group([button, imgInfo])
+            Globals['infoButton'] = new fabric.Group([button, imgInfo], {visible: false, left: pos.left+80*2, top: pos.top })
                 .on('selected', function(){
                     if (Globals['Debug']) {
                         Globals['Debug'] = false;
@@ -90,7 +232,7 @@ function SetUpSettings(pos) {
                     })
 
                 var button = new fabric.Circle( parameters )
-                Globals['languageButton'] = new fabric.Group([button, imgLang])
+                Globals['languageButton'] = new fabric.Group([button, imgLang], {visible: false, left: pos.left+80*1, top: pos.top })
                     .on('selected', function() { })
 
                 fabric.loadSVGFromURL('js/assets/icons/settings49.svg', function(obj, opt) {
@@ -103,21 +245,27 @@ function SetUpSettings(pos) {
                         })
 
                         var button = new fabric.Circle( parameters )
-                        Globals['settingsButton'] = new fabric.Group([button, imgGear])
+                        Globals['settingsButton'] = new fabric.Group([button, imgGear], {visible: true, left: pos.left, top: pos.top })
                             .on('selected', function(){
+                                console.log('on', on);
                                 if (on) {
-                                     Globals['saveButton'].visible=false
-                                     Globals['infoButton'].visible=false
-                                     Globals['languageButton'].visible=false
-                                     Globals['unitsButton'].visible=false
+                                    on = false
+                                    Globals['settingsButton'].item(1).set('fill', '#000000')
+                                    Globals['saveButton'].visible=false
+                                    Globals['infoButton'].visible=false
+                                    Globals['languageButton'].visible=false
+                                    Globals['unitsButton'].visible=false
 
                                 } else {
-                                     Globals['saveButton'].visible=true
-                                     Globals['infoButton'].visible=true
-                                     Globals['languageButton'].visible=true
-                                     Globals['unitsButton'].visible=true
-
+                                    on = true
+                                    Globals['settingsButton'].item(1).set('fill', '#ffffff')
+                                    Globals['saveButton'].visible=true
+                                    Globals['infoButton'].visible=true
+                                    Globals['languageButton'].visible=true
+                                    Globals['unitsButton'].visible=true
                                 }
+                                canvas.renderAll();
+                                canvas.deactivateAll(); // deselect everything
                             })
 
                         canvas.add( Globals['settingsButton'],
@@ -133,7 +281,7 @@ function SetUpSettings(pos) {
 
 /**
  * Determines the layout of all the things!
- * User selects either Bath or Shower mode, which calls the appropriate functions
+ * User selects either Bath or Shower MODE, which calls the appropriate functions
  * which thereby determines the layout of the overall interface
  */
 function SetUpModes() {
@@ -165,12 +313,14 @@ function SetUpModes() {
         Globals['BathMode'] = new fabric.Group([ bath, img])
             .on('selected', function() {
                 Globals['Mode'] = 'Bath'
-                SetUpAnalogClock(); // This can stay where it is
-                SetUpBathControls();
-                SetUpChildSafe( {left: 468, top: 834} );  // give it an object containing position information
-                SetUpPowerButton( {left: 534, top: 880} );  // give it an object containing position information
-                SetUpAnalogClock(); // This can stay where it is
-                SetUpTempControls( {hotL: 516, hotT: 960, coldL: 701, coldT: 960} );  // give it an object containing position information
+                SetUpUserModel()
+                // SetUpSettings({left: 460, top: 708})
+                // SetUpAnalogClock(); // This can stay where it is
+                // SetUpBathControls();
+                // SetUpChildSafe( {left: 468, top: 834} );  // give it an object containing position information
+                // SetUpPowerButton( {left: 534, top: 880} );  // give it an object containing position information
+                // SetUpAnalogClock(); // This can stay where it is
+                // SetUpTempControls( {hotL: 516, hotT: 960, coldL: 701, coldT: 960} );  // give it an object containing position information
 
                 Globals['ShowerMode'].visible = false;
                 Globals['BathMode'].visible = false;
@@ -208,12 +358,13 @@ function SetUpModes() {
         Globals['ShowerMode'] = new fabric.Group([ shower, img])
             .on('selected', function() {
                 Globals['Mode'] = 'Shower';
-
-                SetUpAnalogClock(); // This can stay where it is
-                SetUpChildSafe( {top: 404, left: 1525} );  // give it an object containing position information
-                SetUpPowerButton( {left: 1583, top: 452} );  // give it an object containing position information
-                SetUpTempControls( {hotL: 1580, hotT: 525, coldL: 1740, coldT: 525} );  // give it an object containing position information
-                SetUpSprayControls();
+                SetUpUserModel()
+                // SetUpSettings({left: 10, top: 126})
+                // SetUpAnalogClock(); // This can stay where it is
+                // SetUpChildSafe( {top: 404, left: 1525} );  // give it an object containing position information
+                // SetUpPowerButton( {left: 1583, top: 452} );  // give it an object containing position information
+                // SetUpTempControls( {hotL: 1580, hotT: 525, coldL: 1740, coldT: 525} );  // give it an object containing position information
+                // SetUpSprayControls();
                 // SetUpBathControls()
                 Globals['ShowerMode'].visible = false;
                 Globals['BathMode'].visible = false;
@@ -487,7 +638,7 @@ function SetUpPowerButton(pos) {
  * visual representation of the temperature is displayed on via temperature
  * gradient.
  *
- * If the system is in debug mode, a numerical value displaying the temperature
+ * If the system is in debug MODE, a numerical value displaying the temperature
  * will be displayed on top of the Gradient in either Celsius or Fahrenheit
  *
  * Finally, should 'ChildSafe Mode' be active, the temperature will stop at 100
@@ -520,9 +671,17 @@ function SetUpTempControls(pos) {
 
             Globals['hotButton'] = new fabric.Group([button1, img ], { visible: false })
                 .scale(0.5)
-                .on('selected', function() {
-                    console.log("Flame!");
-                    ControlWaterTemp(3);
+                .on({
+                    "mousedown": function(){
+                        console.log("Flame!");
+                        Globals['hotButton'].item(1).set('fill', '#ffffff')
+                        ControlWaterTemp(3);
+                    },
+                    "mouseup": function(){
+                        Globals['hotButton'].item(1).set('fill', '#ff0000')
+                        canvas.renderAll();
+                        canvas.deactivateAll(); // deselect everything
+                    }
                 });
             canvas.add(Globals['hotButton'])
         })
